@@ -3,133 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Cadastro - Setores</title>
+    <title>Cadastro - Sistema de Gestão</title>
     <style>
-        :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #2c3e50;
-            --success-color: #27ae60;
-            --bg-color: #f0f2f5;
-        }
+        :root { --primary: #6c5ce7; --bg: #f9f9fc; --card: #ffffff; --text: #2d3436; --border: #dfe6e9; }
+        .dark-mode { --bg: #1e1e2e; --card: #2b2b3b; --text: #f8f8f2; --border: #44475a; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; transition: 0.3s; }
+        .container { background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 400px; position: relative; text-align: center; }
+        
+        .theme-toggle { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; border: none; background: none; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; border: 2px solid var(--border); background: var(--card); color: var(--text); box-sizing: border-box; }
+        
+        .strength-bar { height: 6px; width: 0%; border-radius: 10px; transition: 0.5s; margin-bottom: 15px; }
+        .weak { width: 33%; background: #ff7675; }
+        .medium { width: 66%; background: #fdcb6e; }
+        .strong { width: 100%; background: #00b894; }
 
-        .card-cadastro {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h2 { text-align: center; color: var(--secondary-color); margin-bottom: 20px; }
-
-        .form-group { margin-bottom: 15px; }
-
-        label { display: block; margin-bottom: 5px; color: #666; font-size: 14px; }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        input:focus, select:focus { border-color: var(--primary-color); }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-
-        button:hover { background-color: #357abd; }
-
-        #mensagem { text-align: center; margin-top: 15px; font-size: 14px; }
+        .btn-cadastrar { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-cadastrar:hover { background: #5a4bcf; transform: translateY(-2px); }
+        .link-lista { display: block; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
+    <nav style="background: #6c5ce7; padding: 15px; display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;">
+    <a href="cadastro.html" style="color: white; text-decoration: none; font-weight: bold;">➕ Novo Cadastro</a>
+    <a href="lista.html" style="color: white; text-decoration: none; font-weight: bold;">📋 Lista de Funcionários</a>
+</nav>
 
-<div class="card-cadastro">
-    <h2>Cadastro de Funcionário</h2>
-    <form id="meuFormulario">
-        <div class="form-group">
-            <label>Nome Completo</label>
-            <input type="text" id="nome" placeholder="Digite seu nome" required>
-        </div>
+<div class="container" id="conteudo">
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+    <h2 style="margin-bottom: 10px;">Criar Conta</h2>
+    <p style="color: #b2bec3; font-size: 14px; margin-bottom: 20px;">Preencha os dados do funcionário.</p>
+    
+<form id="formCadastro">
+    <input type="text" id="nome" placeholder="Nome Completo" required>
+    <input type="email" id="email" placeholder="E-mail Corporativo" required>
+    
+    <input type="password" id="senha" placeholder="Senha (Mín. 6 caracteres)" required oninput="checkSenha(this.value)">
+    <div id="barra" class="strength-bar"></div>
+    
+    <select id="setor" required>
+        <option value="" disabled selected>Selecione o Setor</option>
+        <option value="Tecnologia (TI)">Tecnologia (TI)</option>
+        <option value="RH">Recursos Humanos (RH)</option>
+        <option value="Vendas">Vendas</option>
+        <option value="Financeiro">Financeiro</option>
+    </select>
 
-        <div class="form-group">
-            <label>E-mail Corporativo</label>
-            <input type="email" id="email" placeholder="seuemail@empresa.com" required>
-        </div>
+    <select id="status" required>
+        <option value="Ativo">Ativo</option>
+        <option value="Férias">Em Férias</option>
+        <option value="Treinamento">Em Treinamento</option>
+    </select>
 
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" id="senha" placeholder="••••••••" required>
-        </div>
-
-        <div class="form-group">
-            <label>Setor</label>
-            <select id="setor" required>
-                <option value="">Selecione um setor...</option>
-                <option value="ti">Tecnologia (TI)</option>
-                <option value="rh">Recursos Humanos</option>
-                <option value="vendas">Vendas</option>
-                <option value="financeiro">Financeiro</option>
-            </select>
-        </div>
-
-        <button type="submit">Finalizar Cadastro</button>
-    </form>
-    <div id="mensagem"></div>
-</div>
+    <button type="submit" class="btn-cadastrar">Finalizar Cadastro</button>
+</form>
 
 <script>
-    document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
+    // ... (mantenha suas funções toggleTheme e checkSenha como estão) ...
+
+    document.getElementById('formCadastro').addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        const dados = {
+        const user = {
             nome: document.getElementById('nome').value,
             email: document.getElementById('email').value,
-            senha: document.getElementById('senha').value,
-            setor: document.getElementById('setor').value
+            setor: document.getElementById('setor').value,
+            status: document.getElementById('status').value, // Pegando o status
+            id: Date.now()
         };
-
-        const msgDiv = document.getElementById('mensagem');
-        msgDiv.innerText = "Enviando para o servidor Python...";
-        msgDiv.style.color = "blue";
-
-        // Aqui é onde o JS conversa com o Python (API)
-        console.log("Dados prontos para o Python:", dados);
+        const lista = JSON.parse(localStorage.getItem('usuariosCadastrados')) || [];
+        lista.push(user);
+        localStorage.setItem('usuariosCadastrados', JSON.stringify(lista));
         
-        /* Exemplo de como seria a chamada para o Python:
-        const response = await fetch('http://localhost:5000/api/cadastro', {
-            method: 'POST',
-            body: JSON.stringify(dados)
-        });
-        */
+        document.getElementById('conteudo').innerHTML = `
+            <div style="animation: fadeIn 0.5s ease; padding: 20px;">
+                <div style="font-size: 60px; color: #00b894;">✓</div>
+                <h3>Sucesso!</h3>
+                <p>Redirecionando para a lista...</p>
+            </div>
+        `;
+        setTimeout(() => window.location.href = 'lista.html', 1500);
     });
 </script>
-
 </body>
 </html>
