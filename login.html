@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Sistema RH</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #6c5ce7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 300px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #6c5ce7; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>RH System</h2>
+        <input type="text" id="user" placeholder="Usuário (admin)">
+        <input type="password" id="pass" placeholder="Senha (123)">
+        <button onclick="logar()">Entrar</button>
+    </div>
+
+    <script>
+        function logar() {
+            const u = document.getElementById('user').value;
+            const s = document.getElementById('pass').value;
+            if(u === 'admin' && s === '123') {
+                localStorage.setItem('logado', 'true');
+                window.location.href = 'lista.html';
+            } else {
+                alert('Acesso negado!');
+            }
+        }
+    </script>
+</body>
+</html>

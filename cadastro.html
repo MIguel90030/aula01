@@ -26,9 +26,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <nav style="background: #6c5ce7; padding: 15px; display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;">
+
+
+  <nav style="background: #6c5ce7; padding: 15px; display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;">
     <a href="cadastro.html" style="color: white; text-decoration: none; font-weight: bold;">➕ Novo Cadastro</a>
-    <a href="lista.html" style="color: white; text-decoration: none; font-weight: bold;">📋 Lista de Funcionários</a>
+    <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">📋 Lista de Funcionários</a>
+    <a href="#" onclick="logout()" style="color: #ff7675; text-decoration: none; font-weight: bold;">❌ Sair</a>
 </nav>
 
 <div class="container" id="conteudo">
@@ -132,8 +135,12 @@
             });
         }
 
-        setTimeout(() => window.location.href = 'lista.html', 1500);
+        setTimeout(() => window.location.href = 'index.html', 1500);
     });
+function logout() {
+    localStorage.removeItem('logado');
+    window.location.href = 'index.html'; // Aqui pode ser index porque você está saindo do cadastro
+}
 </script>
 </body>
 </html>
