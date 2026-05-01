@@ -29,46 +29,72 @@
 
 <script>
     window.onload = () => {
-        const usuario = JSON.parse(localStorage.getItem('visualizarUsuario'));
+    // Verificação de segurança:
+    if (localStorage.getItem('logado') !== 'true') {
+        window.location.href = 'login.html';
+        return; // O 'return' impede que o resto da página carregue se ele não estiver logado
+    }
 
-        if (!usuario) {
-            document.body.innerHTML = "<h1>Funcionário não encontrado!</h1><a href='lista.html'>Voltar</a>";
-            return;
-        }
-        if (localStorage.getItem('tema') === 'dark') {
-    document.body.classList.add('dark-mode');
+    // --- O resto do seu código window.onload continua aqui embaixo normal ---
+    // (ex: renderizar(), checar dark mode, etc...)
 }
+    window.onload = () => {
+    const usuario = JSON.parse(localStorage.getItem('visualizarUsuario'));
 
-        const corStatus = usuario.status === 'Férias' ? '#fdcb6e' : (usuario.status === 'Treinamento' ? '#0984e3' : '#00b894');
+    if (!usuario) {
+        document.body.innerHTML = "<h1>Funcionário não encontrado!</h1><a href='index.html'>Voltar</a>";
+        return;
+    }
 
-        document.getElementById('cardPerfil').innerHTML = `
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${usuario.nome}" class="avatar-grande">
-            
-            <div class="badge-status" style="background: ${corStatus}22; color: ${corStatus}">
-                ● ${usuario.status || 'Ativo'}
+    // Mantendo a lógica do Dark Mode
+    if (localStorage.getItem('tema') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+
+    const corStatus = usuario.status === 'Férias' ? '#fdcb6e' : (usuario.status === 'Treinamento' ? '#0984e3' : '#00b894');
+
+    document.getElementById('cardPerfil').innerHTML = `
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${usuario.nome}" class="avatar-grande">
+        
+        <div class="badge-status" style="background: ${corStatus}22; color: ${corStatus}">
+            ● ${usuario.status || 'Ativo'}
+        </div>
+
+        <h2 style="margin: 0 0 5px 0;">${usuario.nome}</h2>
+        <p style="color: var(--primary); font-weight: bold; margin: 0 0 5px 0; text-transform: uppercase; font-size: 14px;">
+            ${usuario.cargo || 'Cargo não informado'}
+        </p>
+        <p style="color: #636e72; margin-bottom: 30px; font-size: 13px;">ID: #${usuario.id.toString().slice(-6)}</p>
+
+        <div class="info-group">
+            <label>E-mail Corporativo</label>
+            <span>${usuario.email}</span>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <div class="info-group" style="flex: 1;">
+                <label>CPF</label>
+                <span>${usuario.cpf || '---'}</span>
             </div>
-
-            <h2 style="margin: 0 0 5px 0;">${usuario.nome}</h2>
-            <p style="color: #636e72; margin-bottom: 30px;">ID do Colaborador: #${usuario.id.toString().slice(-6)}</p>
-
-            <div class="info-group">
-                <label>E-mail Corporativo</label>
-                <span>${usuario.email}</span>
+            <div class="info-group" style="flex: 1;">
+                <label>Telefone</label>
+                <span>${usuario.telefone || '---'}</span>
             </div>
+        </div>
 
-            <div class="info-group">
-                <label>Setor / Departamento</label>
-                <span>${usuario.setor}</span>
-            </div>
+        <div class="info-group">
+            <label>Setor / Departamento</label>
+            <span>${usuario.setor}</span>
+        </div>
 
-            <div class="info-group">
-                <label>Data de Registro</label>
-                <span>${new Date(usuario.id).toLocaleDateString()}</span>
-            </div>
+        <div class="info-group">
+            <label>Data de Admissão</label>
+            <span>${usuario.admissao ? new Date(usuario.admissao).toLocaleDateString('pt-BR') : 'Não informada'}</span>
+        </div>
 
-            <a href="index.html" class="btn-voltar">← Voltar para a Lista</a>
-        `;
-    };
+        <a href="index.html" class="btn-voltar">← Voltar para a Lista</a>
+    `;
+};
 </script>
 
 </body>

@@ -8,7 +8,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; color: #2d3436; }
         .container { max-width: 900px; margin: auto; }
         
-        .dashboard { display: flex; gap: 15px; margin-bottom: 25px; }
+        .dashboard { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; /* Isso evita que os cards saiam da tela */ }
         .stat-card { background: white; padding: 20px; border-radius: 15px; flex: 1; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .stat-card h3 { margin: 0; color: #6c5ce7; font-size: 28px; }
         .stat-card p { margin: 5px 0 0; color: #636e72; font-weight: 600; }
@@ -171,7 +171,12 @@ mas o CSS acima já melhora o que você tem! */
     
     <table>
         <thead>
-            <tr><th>Nome</th><th>Setor</th><th style="text-align: center;">Ações</th></tr>
+            <tr>
+                 <th>Funcionário</th>
+                 <th>Cargo / Setor</th> <th style="text-align: center;">Ações</th>
+                 <th style="text-align: center;">Ações</th>
+            </tr>
+           
         </thead>
         <tbody id="tabela"></tbody>
     </table>
@@ -181,7 +186,22 @@ mas o CSS acima já melhora o que você tem! */
         <h3>Editar Funcionário</h3>
         <input type="hidden" id="editIndex">
         <label>Nome:</label>
+        
+        
+        <label>Cargo:</label>
+        <input type="text" id="editCargo" style="width:100%; padding:10px; margin:5px 0 15px; border-radius:8px; border:1px solid #ddd;">
         <input type="text" id="editNome" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ddd;">
+        
+        <div style="display:flex; gap:10px;">
+    <div style="flex:1;">
+        <label>CPF:</label>
+        <input type="text" id="editCpf" maxlength="14" oninput="mascaraCPF(this)" style="width:100%; padding:10px; margin:5px 0 15px; border-radius:8px; border:1px solid #ddd;">
+    </div>
+    <div style="flex:1;">
+        <label>Telefone:</label>
+        <input type="text" id="editTelefone" maxlength="15" oninput="mascaraTelefone(this)" style="width:100%; padding:10px; margin:5px 0 15px; border-radius:8px; border:1px solid #ddd;">
+    </div>
+</div>
         
         <label>Setor:</label>
         <select id="editSetor" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ddd;">
@@ -216,6 +236,16 @@ mas o CSS acima já melhora o que você tem! */
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    window.onload = () => {
+    // Verificação de segurança:
+    if (localStorage.getItem('logado') !== 'true') {
+        window.location.href = 'login.html';
+        return; // O 'return' impede que o resto da página carregue se ele não estiver logado
+    }
+
+    // --- O resto do seu código window.onload continua aqui embaixo normal ---
+    // (ex: renderizar(), checar dark mode, etc...)
+}
     // 1. Variável global do gráfico
    window.onload = () => {
     // Só redirecione se o usuário NÃO estiver logado E a página atual NÃO for o login
@@ -239,46 +269,64 @@ function filtrarStatus(status, elemento) {
     renderizar(); // Chama a função que já temos para atualizar a tela
 }
 
-    // 2. Função para renderizar a tabela e o dashboard (VERSÃO ÚNICA E CORRIGIDA)
-    function renderizar() {
-        const busca = document.getElementById('busca').value.toLowerCase();
-        const usuarios = JSON.parse(localStorage.getItem('usuariosCadastrados')) || [];
-        const tabela = document.getElementById('tabela');
-        const dash = document.getElementById('dash');
+   function renderizar() {
+    const busca = document.getElementById('busca').value.toLowerCase();
+    const usuarios = JSON.parse(localStorage.getItem('usuariosCadastrados')) || [];
+    const tabela = document.getElementById('tabela');
+    const dash = document.getElementById('dash');
+    
+    // 1. CÁLCULO DE ESTATÍSTICAS
+    const total = usuarios.length;
+    const emFerias = usuarios.filter(u => u.status === 'Férias').length;
+    const emTreinamento = usuarios.filter(u => u.status === 'Treinamento').length;
+
+    const contagemSetores = { "Tecnologia (TI)": 0, "RH": 0, "Vendas": 0, "Financeiro": 0 };
+    usuarios.forEach(u => {
+        if (contagemSetores[u.setor] !== undefined) contagemSetores[u.setor]++;
+    });
+
+    // 2. RENDERIZAÇÃO DOS CARDS (DASHBOARD)
+    let cardsHTML = `
+        <div class="stat-card" onclick="filtrarStatus('todos', this)" style="cursor:pointer; border-bottom: 5px solid #6c5ce7;">
+            <h3 style="color: #6c5ce7;">${total}</h3>
+            <p>Total Geral</p>
+        </div>
+        <div class="stat-card" onclick="filtrarStatus('Férias', this)" style="cursor:pointer; border-bottom: 5px solid #fdcb6e;">
+            <h3 style="color: #fdcb6e;">${emFerias}</h3>
+            <p>Em Férias</p>
+        </div>
+        <div class="stat-card" onclick="filtrarStatus('Treinamento', this)" style="cursor:pointer; border-bottom: 5px solid #0984e3;">
+            <h3 style="color: #0984e3;">${emTreinamento}</h3>
+            <p>Treinando</p>
+        </div>
+    `;
+
+    cardsHTML += Object.keys(contagemSetores).map(s => `
+        <div class="stat-card" onclick="filtrarRapido('${s}')" style="cursor:pointer; opacity: 0.8;">
+            <h3 style="font-size: 20px;">${contagemSetores[s]}</h3>
+            <p style="font-size: 11px;">${s}</p>
+        </div>
+    `).join('');
+
+    dash.innerHTML = cardsHTML;
+
+    // 3. FILTRO DE BUSCA AVANÇADO
+    const filtrados = usuarios.filter(u => {
+        const termo = busca.toLowerCase();
+        const correspondeBusca = 
+            u.nome.toLowerCase().includes(termo) || 
+            u.setor.toLowerCase().includes(termo) || 
+            (u.cargo && u.cargo.toLowerCase().includes(termo)) || 
+            (u.cpf && u.cpf.includes(termo));
         
-        // Contagem dos setores para os Cards
-        const contagem = { "Tecnologia (TI)": 0, "RH": 0, "Vendas": 0, "Financeiro": 0 };
-        usuarios.forEach(u => {
-            if (contagem[u.setor] !== undefined) contagem[u.setor]++;
-        });
+        const correspondeStatus = statusAtual === 'todos' || u.status === statusAtual;
+        return correspondeBusca && correspondeStatus;
+    });
 
-        // Atualiza os Cards do Dashboard
-        dash.innerHTML = Object.keys(contagem).map(s => `
-            <div class="stat-card" onclick="filtrarRapido('${s}')" style="cursor:pointer;">
-                <h3>${contagem[s]}</h3>
-                <p>${s}</p>
-            </div>
-        `).join('');
-
-        // Filtro de busca
-       const filtrados = usuarios.filter(u => {
-    // 1. Verifica se o nome ou setor bate com a busca digitada
-    const correspondeBusca = u.nome.toLowerCase().includes(busca) || u.setor.toLowerCase().includes(busca);
-    
-    // 2. Verifica se o status do usuário é o que foi clicado no botão
-    const correspondeStatus = statusAtual === 'todos' || u.status === statusAtual;
-    
-    // Só retorna o usuário se ele passar nas duas regras ao mesmo tempo!
-    return correspondeBusca && correspondeStatus;
-});
-        // Se não houver dados
-        if (filtrados.length === 0) {
-            tabela.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 40px; color: #999;">Nenhum funcionário encontrado.</td></tr>';
-            atualizarGrafico(); // Atualiza o gráfico mesmo vazio
-            return;
-        }
-
-        // Renderização da Tabela
+    // 4. RENDERIZAÇÃO DA TABELA
+    if (filtrados.length === 0) {
+        tabela.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 40px; color: #999;">Nenhum funcionário encontrado.</td></tr>';
+    } else {
         tabela.innerHTML = filtrados.map((u, index) => {
             const corStatus = u.status === 'Férias' ? '#fdcb6e' : (u.status === 'Treinamento' ? '#0984e3' : '#00b894');
             
@@ -290,12 +338,17 @@ function filtrarStatus(status, elemento) {
                                  style="width: 40px; height: 40px; border-radius: 50%; background: #f0f0f0;">
                             <div>
                                 <strong>${u.nome}</strong><br>
-                                <small style="color: ${corStatus}; font-weight: bold;">● ${u.status || 'Ativo'}</small>
-                                <small style="color: #666;">${calcularTempoCasa(u.admissao)}</small> </div>
+                                <small style="color: #666;">ID: #${u.id.toString().slice(-6)}</small>
                             </div>
                         </div>
                     </td>
-                    <td><span style="background: #eee; padding: 4px 10px; border-radius: 20px; font-size: 12px;">${u.setor}</span></td>
+                    <td>
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-weight: bold; color: #6c5ce7;">${u.cargo || 'Funcionário'}</span>
+                            <span style="font-size: 12px; color: #636e72;">${u.setor}</span>
+                            <small style="color: ${corStatus}; font-weight: bold; margin-top: 4px;">● ${u.status || 'Ativo'}</small>
+                        </div>
+                    </td>
                     <td style="text-align: center;">
                         <button class="btn-action" title="Ver Perfil" onclick="verPerfil(${index})">👁️</button>
                         <button class="btn-action" title="Editar" onclick="editar(${index})">📝</button>
@@ -304,11 +357,13 @@ function filtrarStatus(status, elemento) {
                 </tr>
             `;
         }).join('');
-
-        // CHAMA O GRÁFICO APÓS RENDERIZAR A TABELA
-        atualizarGrafico();
     }
 
+    // 5. ATUALIZA O GRÁFICO
+    if (typeof atualizarGrafico === "function") {
+        atualizarGrafico();
+    }
+}
     // 3. Função do Gráfico
     function atualizarGrafico() {
         const canvas = document.getElementById('meuGrafico');
@@ -342,28 +397,62 @@ function filtrarStatus(status, elemento) {
 
     // --- OUTRAS FUNÇÕES DO SISTEMA ---
 
-    function editar(index) {
-        const usuarios = JSON.parse(localStorage.getItem('usuariosCadastrados'));
-        const user = usuarios[index];
-        document.getElementById('editIndex').value = index;
-        document.getElementById('editNome').value = user.nome;
-        document.getElementById('editSetor').value = user.setor;
-        document.getElementById('editStatus').value = user.status || 'Ativo';
-        document.getElementById('modalEditar').style.display = 'flex';
-    }
+   function mascaraCPF(campo) {
+    let v = campo.value.replace(/\D/g, "");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d)/, "$1.$2");
+    v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    campo.value = v;
+}
 
-    function fecharModal() { document.getElementById('modalEditar').style.display = 'none'; }
+function mascaraTelefone(campo) {
+    let v = campo.value.replace(/\D/g, "");
+    v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+    v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+    campo.value = v;
+}
 
-    function salvarEdicao() {
-        const index = document.getElementById('editIndex').value;
-        let usuarios = JSON.parse(localStorage.getItem('usuariosCadastrados'));
-        usuarios[index].nome = document.getElementById('editNome').value;
-        usuarios[index].setor = document.getElementById('editSetor').value;
-        usuarios[index].status = document.getElementById('editStatus').value;
-        localStorage.setItem('usuariosCadastrados', JSON.stringify(usuarios));
-        fecharModal();
-        renderizar();
-    }
+function editar(index) {
+    const usuarios = JSON.parse(localStorage.getItem('usuariosCadastrados'));
+    const user = usuarios[index];
+    
+    // Preenche os campos do modal com os dados atuais
+    document.getElementById('editIndex').value = index;
+    document.getElementById('editNome').value = user.nome;
+    document.getElementById('editCargo').value = user.cargo || '';
+    document.getElementById('editCpf').value = user.cpf || '';
+    document.getElementById('editTelefone').value = user.telefone || '';
+    document.getElementById('editSetor').value = user.setor;
+    document.getElementById('editStatus').value = user.status || 'Ativo';
+    
+    document.getElementById('modalEditar').style.display = 'flex';
+}
+
+function salvarEdicao() {
+    const index = document.getElementById('editIndex').value;
+    let usuarios = JSON.parse(localStorage.getItem('usuariosCadastrados'));
+    
+    // Atualiza o objeto com os novos valores digitados
+    usuarios[index].nome = document.getElementById('editNome').value;
+    usuarios[index].cargo = document.getElementById('editCargo').value;
+    usuarios[index].cpf = document.getElementById('editCpf').value;
+    usuarios[index].telefone = document.getElementById('editTelefone').value;
+    usuarios[index].setor = document.getElementById('editSetor').value;
+    usuarios[index].status = document.getElementById('editStatus').value;
+    
+    localStorage.setItem('usuariosCadastrados', JSON.stringify(usuarios));
+    
+    fecharModal();
+    renderizar(); // Atualiza a tabela na hora
+    
+    Swal.fire({
+        title: "Atualizado!",
+        text: "Dados alterados com sucesso.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false
+    });
+}
 
     function excluir(index) {
     Swal.fire({
