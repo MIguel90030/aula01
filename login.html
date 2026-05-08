@@ -29,6 +29,11 @@
                 alert('Acesso negado!');
             }
         }
+        document.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        logar();
+    }
+});
     </script>
 </body>
 </html>

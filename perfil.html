@@ -28,17 +28,14 @@
     </div>
 
 <script>
-    window.onload = () => {
-    // Verificação de segurança:
+  window.onload = () => {
+    // 1. Verificação de Segurança
     if (localStorage.getItem('logado') !== 'true') {
         window.location.href = 'login.html';
-        return; // O 'return' impede que o resto da página carregue se ele não estiver logado
+        return; 
     }
 
-    // --- O resto do seu código window.onload continua aqui embaixo normal ---
-    // (ex: renderizar(), checar dark mode, etc...)
-}
-    window.onload = () => {
+    // 2. Recuperação dos Dados
     const usuario = JSON.parse(localStorage.getItem('visualizarUsuario'));
 
     if (!usuario) {
