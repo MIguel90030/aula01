@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="stylesheet" href="style.css">
+
+<script src="tema.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Sistema de Gestão</title>
@@ -22,6 +25,57 @@
         .btn-cadastrar { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-cadastrar:hover { background: #5a4bcf; transform: translateY(-2px); }
         .link-lista { display: block; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: 600; }
+        /* No :root de cada página, adicione as cores base */
+:root { 
+    --primary: #6c5ce7; 
+    --bg: #f4f7f6; 
+    --card: #ffffff; 
+    --text: #2d3436; 
+    --border: #dfe6e9; 
+}
+
+/* E a classe que o JavaScript vai ativar */
+.dark-mode { 
+    --bg: #1e1e2e !important; 
+    --card: #2b2b3b !important; 
+    --text: #f8f8f2 !important; 
+    --border: #44475a !important; 
+}
+
+/* IMPORTANTE: Altere o 'background' do body para usar a variável */
+body { 
+    background-color: var(--bg); 
+    color: var(--text); 
+    transition: 0.3s; 
+}
+
+/* No index.html, force os cards e tabela a usarem as variáveis */
+.stat-card, table, tr, .login-card, .profile-card, .info-group {
+    background-color: var(--card) !important;
+    color: var(--text) !important;
+}
+/* Isso cria as cores "coringa" */
+:root { 
+    --bg: #f9f9fc; 
+    --card: #ffffff; 
+    --text: #2d3436; 
+    --border: #dfe6e9; 
+}
+
+/* Quando o body tiver a classe .dark-mode, as cores mudam */
+.dark-mode { 
+    --bg: #1e1e2e; 
+    --card: #2b2b3b; 
+    --text: #f8f8f2; 
+    --border: #44475a; 
+}
+
+/* Aplique as variáveis nos elementos principais */
+body { background-color: var(--bg); color: var(--text); }
+.container, .stat-card, .login-card, .profile-card, table, tr, td { 
+    background-color: var(--card) !important; 
+    color: var(--text) !important; 
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -35,7 +89,7 @@
 </nav>
 
 <div class="container" id="conteudo">
-    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+    <button onclick="alternarTema()">🌓</button>
     <h2 style="margin-bottom: 10px;">Criar Conta</h2>
     <p style="color: #b2bec3; font-size: 14px; margin-bottom: 20px;">Preencha os dados do funcionário.</p>
     
@@ -83,11 +137,7 @@
     // --- O resto do seu código window.onload continua aqui embaixo normal ---
     // (ex: renderizar(), checar dark mode, etc...)
 }
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('tema', isDark ? 'dark' : 'light');
-    }
+    
 
     function checkSenha(senha) {
         const barra = document.getElementById('barra');

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="stylesheet" href="style.css">
+
+<script src="tema.js"></script>
     <meta charset="UTF-8">
     <title>Login - Sistema RH</title>
     <style>
@@ -8,6 +11,57 @@
         .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 300px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
         button { width: 100%; padding: 12px; background: #6c5ce7; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* No :root de cada página, adicione as cores base */
+:root { 
+    --primary: #6c5ce7; 
+    --bg: #f4f7f6; 
+    --card: #ffffff; 
+    --text: #2d3436; 
+    --border: #dfe6e9; 
+}
+
+/* E a classe que o JavaScript vai ativar */
+.dark-mode { 
+    --bg: #1e1e2e !important; 
+    --card: #2b2b3b !important; 
+    --text: #f8f8f2 !important; 
+    --border: #44475a !important; 
+}
+
+/* IMPORTANTE: Altere o 'background' do body para usar a variável */
+body { 
+    background-color: var(--bg); 
+    color: var(--text); 
+    transition: 0.3s; 
+}
+
+/* No index.html, force os cards e tabela a usarem as variáveis */
+.stat-card, table, tr, .login-card, .profile-card, .info-group {
+    background-color: var(--card) !important;
+    color: var(--text) !important;
+}
+/* Isso cria as cores "coringa" */
+:root { 
+    --bg: #f9f9fc; 
+    --card: #ffffff; 
+    --text: #2d3436; 
+    --border: #dfe6e9; 
+}
+
+/* Quando o body tiver a classe .dark-mode, as cores mudam */
+.dark-mode { 
+    --bg: #1e1e2e; 
+    --card: #2b2b3b; 
+    --text: #f8f8f2; 
+    --border: #44475a; 
+}
+
+/* Aplique as variáveis nos elementos principais */
+body { background-color: var(--bg); color: var(--text); }
+.container, .stat-card, .login-card, .profile-card, table, tr, td { 
+    background-color: var(--card) !important; 
+    color: var(--text) !important; 
+}
     </style>
 </head>
 <body>
@@ -32,6 +86,15 @@
         document.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         logar();
+    }
+});
+// Esta função é o que o botão 'onclick' procura
+
+
+// Isso aqui faz a página carregar no modo certo assim que abre
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem('tema') === 'dark') {
+        document.body.classList.add('dark-mode');
     }
 });
     </script>

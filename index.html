@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <link rel="stylesheet" href="style.css">
+
+<script src="tema.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão de Usuários</title>
@@ -119,6 +122,57 @@ tr:hover {
 }
 /* No seu JS, você pode ajustar para usar essa classe se quiser algo mais avançado, 
 mas o CSS acima já melhora o que você tem! */
+/* No :root de cada página, adicione as cores base */
+:root { 
+    --primary: #6c5ce7; 
+    --bg: #f4f7f6; 
+    --card: #ffffff; 
+    --text: #2d3436; 
+    --border: #dfe6e9; 
+}
+
+/* E a classe que o JavaScript vai ativar */
+.dark-mode { 
+    --bg: #1e1e2e !important; 
+    --card: #2b2b3b !important; 
+    --text: #f8f8f2 !important; 
+    --border: #44475a !important; 
+}
+
+/* IMPORTANTE: Altere o 'background' do body para usar a variável */
+body { 
+    background-color: var(--bg); 
+    color: var(--text); 
+    transition: 0.3s; 
+}
+
+/* No index.html, force os cards e tabela a usarem as variáveis */
+.stat-card, table, tr, .login-card, .profile-card, .info-group {
+    background-color: var(--card) !important;
+    color: var(--text) !important;
+}
+/* Isso cria as cores "coringa" */
+:root { 
+    --bg: #f9f9fc; 
+    --card: #ffffff; 
+    --text: #2d3436; 
+    --border: #dfe6e9; 
+}
+
+/* Quando o body tiver a classe .dark-mode, as cores mudam */
+.dark-mode { 
+    --bg: #1e1e2e; 
+    --card: #2b2b3b; 
+    --text: #f8f8f2; 
+    --border: #44475a; 
+}
+
+/* Aplique as variáveis nos elementos principais */
+body { background-color: var(--bg); color: var(--text); }
+.container, .stat-card, .login-card, .profile-card, table, tr, td { 
+    background-color: var(--card) !important; 
+    color: var(--text) !important; 
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -131,6 +185,7 @@ mas o CSS acima já melhora o que você tem! */
     <a href="#" onclick="logout()" style="color: #ff7675; text-decoration: none; font-weight: bold;">❌ Sair</a>
 </nav>
 <div class="filter-container" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+    
     <button class="btn-filter active" onclick="filtrarStatus('todos', this)">Todos</button>
     <button class="btn-filter" onclick="filtrarStatus('Ativo', this)" style="border-left: 5px solid #00b894;">Ativos</button>
     <button class="btn-filter" onclick="filtrarStatus('Férias', this)" style="border-left: 5px solid #fdcb6e;">Em Férias</button>
@@ -530,6 +585,15 @@ function logout() {
     alert("Saindo do sistema...");
     window.location.href = 'cadastro.html'; // Ou mande para a tela de login
 }
+// Esta função é o que o botão 'onclick' procura
+
+
+// Isso aqui faz a página carregar no modo certo assim que abre
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem('tema') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+});
 </script>
 
 </body>

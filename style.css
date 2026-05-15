@@ -1,0 +1,132 @@
+/* Cores do Sistema *//* No seu arquivo style.css */
+
+/* 1. Garante que o fundo da página mude */
+body.dark-mode {
+    background-color: #13141f !important;
+    color: #e0e0e0 !important;
+}
+
+/* 2. Força os cards, tabelas e inputs a mudarem */
+body.dark-mode .container, 
+body.dark-mode .stat-card, 
+body.dark-mode table, 
+body.dark-mode tr, 
+body.dark-mode td,
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode .login-card,
+body.dark-mode .profile-card {
+    background-color: #1c1e2d !important;
+    color: #f8f8f2 !important;
+    border-color: #2d2f45 !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+}
+
+/* 3. Ajuste para os textos pequenos que somem no escuro */
+body.dark-mode p, 
+body.dark-mode label, 
+body.dark-mode small {
+    color: #b2bec3 !important;
+}
+:root {
+    --bg: #f4f7f6;
+    --card: #ffffff;
+    --text: #2d3436;
+    --primary: #6c5ce7;
+    --border: #dfe6e9;
+}
+
+/* Cores do Modo Escuro (Dark Mode) */
+body.dark-mode {
+    --bg: #13141f;
+    --card: #1c1e2d;
+    --text: #e0e0e0;
+    --border: #2d2f45;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Ajuste automático para todos os elementos */
+.container, .stat-card, .login-card, .profile-card, table, tr, td, input, select {
+    background-color: var(--card) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+/* Botão Flutuante de Tema (Opcional, para ficar igual em todas) */
+.theme-switch {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+/* ---------------------------------------------------
+   AJUSTE DOS BOTÕES BRANCOS NO MODO ESCURO
+--------------------------------------------------- */
+
+/* 1. Botões de Filtro Principais e Filtro Rápido */
+body.dark-mode .btn-filter,
+body.dark-mode button[onclick^="filtrarRapido"] {
+    background-color: #1c1e2d !important; /* Fundo escuro igual aos cards */
+    color: #b2bec3 !important; /* Texto cinza claro */
+    border-color: #2d2f45 !important; /* Borda discreta */
+}
+
+/* 2. Efeito quando passa o mouse por cima (Hover) */
+body.dark-mode .btn-filter:hover,
+body.dark-mode button[onclick^="filtrarRapido"]:hover {
+    background-color: #2d2f45 !important;
+    color: #ffffff !important;
+}
+
+/* 3. O botão que estiver "Ativo" continua roxo para dar destaque */
+body.dark-mode .btn-filter.active {
+    background-color: #6c5ce7 !important;
+    color: #ffffff !important;
+    border-color: #6c5ce7 !important;
+}
+
+/* 4. Barra de Pesquisa */
+body.dark-mode #busca {
+    background-color: #1c1e2d !important;
+    color: #ffffff !important;
+    border-color: #2d2f45 !important;
+}
+
+/* 5. Tirar a borda branca dos Cards Grandes (Total, Férias, etc) */
+body.dark-mode .stat-card {
+    border: 1px solid #2d2f45 !important;
+}
+/* ---------------------------------------------------
+   AJUSTE DO BOTÃO DE ALTERNAR TEMA (O REDONDO)
+--------------------------------------------------- */
+
+/* Procura o botão de tema no Modo Escuro */
+body.dark-mode .theme-switch, 
+body.dark-mode button[onclick="alternarTema()"],
+body.dark-mode .nav-item-theme {
+    background-color: #2d2f45 !important; /* Cor de fundo escura */
+    border: 1px solid #44475a !important; /* Borda sutil */
+    color: #f1fa8c !important; /* Deixa o ícone levemente amarelado (estilo lua) */
+    filter: brightness(1.2); /* Dá um leve brilho para destacar */
+}
+
+/* Se for uma imagem (SVG ou PNG) dentro do botão, invertemos a cor dela */
+body.dark-mode button[onclick="alternarTema()"] img {
+    filter: invert(1) brightness(2);
+}
+body.dark-mode button[onclick="alternarTema()"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+}
