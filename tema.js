@@ -17,3 +17,18 @@ function alternarTema() {
     const modo = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
     localStorage.setItem('tema', modo);
 }
+function aplicarTema() {
+    const tema = localStorage.getItem('tema');
+    if (tema === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+function alternarTema() {
+    document.body.classList.toggle('dark-mode');
+    const modo = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    localStorage.setItem('tema', modo);
+}
+
+// Garante que o tema carrega em todas as páginas
+document.addEventListener("DOMContentLoaded", aplicarTema);
