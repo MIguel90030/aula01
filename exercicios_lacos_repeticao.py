@@ -116,6 +116,11 @@ for numero in range(2, 20, 2):   # 2, 4, 6, 8, 10, 12, 14, 16, 18
 # Peça um número ao usuário e use for com range() para imprimir
 # a tabela de multiplicação desse número, de 1 a 10 (ex: para o
 # número 5: "5 x 1 = 5", "5 x 2 = 10", etc.).
+numero = int(input("digite um numero para ver sua tabuada:"))
+for i in range(1, 11):
+    resultado = numero * i
+    print(f'{numero} x {i} = {resultado}')
+    
 
 
 # ================================================================
