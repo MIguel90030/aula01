@@ -83,3 +83,32 @@ else:
    etapa.
 ------------------------------------------------------------
 """
+nome_produto = input('\nInforme o nome do produto: ')
+estoque_atual = int(input('Informe a quantidade atual do estoque: '))
+
+print('\n--MENU--')
+print('1 - Entrada de produtos')
+print('2 - Venda de produtos')
+
+operacao = input('Informe a operação: ')
+quantidade_operacao = int(input('Informe a quantidade: '))
+
+if operacao == '1':
+    novo_estoque = estoque_atual + quantidade_operacao
+    print(f'\nProduto: {nome_produto}')
+    print(f'Estoque anterior: {estoque_atual}')
+    print(f'Entrada: {quantidade_operacao}')
+    print(f'Novo estoque: {novo_estoque}')
+elif operacao == '2':
+    if estoque_atual >= quantidade_operacao:
+        novo_estoque = estoque_atual - quantidade_operacao
+        print(f'\nProduto: {nome_produto}')
+        print(f'Estoque anterior: {estoque_atual}')
+        print(f'Saída: {quantidade_operacao}')
+        print(f'Novo estoque: {novo_estoque}')
+    else:
+        print('\nEstoque é insuficiente!')
+else:
+    print('\nVocê digitou uma operação inválida')     
+
+
