@@ -111,14 +111,14 @@ while True:
     opcao = input('escolha uma opcao: ')
     if opcao == '1':
         valor = float(input('digite o valor da movimentacao: '))
-        movimentacoes.append(valor)
+        movimentacoes.append(valor) # type: ignore
     elif opcao == '2':
-        print('saldo total:', sum(movimentacoes))
+        print('saldo total:', sum(movimentacoes)) # type: ignore
     elif opcao == '3':
-        print('maior entrada:', max(movimentacoes))
-        print('maior saida:', min(movimentacoes))
+        print('maior entrada:', max(movimentacoes)) # type: ignore
+        print('maior saida:', min(movimentacoes)) # type: ignore
     elif opcao == '4':
-        print('historico completo:', movimentacoes)
+        print('historico completo:', movimentacoes) # type: ignore
     elif opcao == '5':
         break
     else:
@@ -214,16 +214,16 @@ while True:
 
     if opcao == '1':
         musica = input('digite o nome da musica: ')
-        playlist.append(musica)
+        playlist.append(musica) # type: ignore
     elif opcao == '2':
         musica = input('digite o nome da musica a ser removida: ')
-        if musica in playlist:
-            playlist.remove(musica)
+        if musica in playlist: # type: ignore
+            playlist.remove(musica) # type: ignore
         else:
             print('musica nao encontrada!')
     elif opcao == '3':
         print('musicas na playlist:')
-        for m in playlist:
+        for m in playlist: # type: ignore
             print(f'- {m}')
     elif opcao == '4':
         break
