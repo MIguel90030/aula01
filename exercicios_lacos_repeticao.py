@@ -128,7 +128,12 @@ for i in range(1, 11):
 # ================================================================
 # Use for para percorrer uma palavra ou frase e contar quantas
 # vezes a letra "a" aparece nela.
-
+palavra = input("Digite uma palavra ou frase: ")
+contagem = 0
+for letra in palavra:
+    if letra == "a":
+        contagem += 1
+print(f"A letra 'a' aparece {contagem} vezes na palavra ou frase digitada.")
 
 # ================================================================
 # EXERCICIO 9 - for: break e continue combinados
@@ -136,6 +141,7 @@ for i in range(1, 11):
 # Use for com range(1, 21) para imprimir os números de 1 a 20,
 # mas pulando (continue) os múltiplos de 3 e parando (break)
 # assim que chegar em 15.
+
 
 
 # ================================================================
