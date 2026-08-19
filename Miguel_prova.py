@@ -26,10 +26,13 @@ Escreva o codigo de cada exercicio logo abaixo do enunciado dele.
 # os dados de uma conta consultada no caixa eletronico.
 # Imprima cada uma junto com seu tipo, usando type().
 # ----------------------------------------------------------------
+numero_conta = int(input("Digite o numero da conta: "))
+saldo = float(input('digite o saldo:'))
 numero_conta = 123456
 saldo = 1500.75
 print(f"Numero da conta: {numero_conta} (tipo: {type(numero_conta)})")
 print(f"Saldo: {saldo} (tipo: {type(saldo)})")
+
 
 
 
