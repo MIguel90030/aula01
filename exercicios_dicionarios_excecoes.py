@@ -140,7 +140,7 @@ def main(): # main()- função principal que organiza o fluxo do programa
 
         if opcao == "1":
             registrar_movimentacao(historico)
-        elif opcao == "2":
+        elif opcao == "2": 
             ver_saldo_total(historico)
         elif opcao == "3":
             ver_maior_entrada_saida(historico)
